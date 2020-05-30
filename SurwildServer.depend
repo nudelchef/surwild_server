@@ -1,0 +1,66 @@
+# depslib dependency file v1.0
+1590312931 source:/workspace/dev/c/workspace/surwild/SurwildServer/main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+
+1590655295 source:/workspace/dev/c/workspace/surwild/SurwildServer/MutliServer.cpp
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<errno.h>
+	<unistd.h>
+	<arpa/inet.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<sys/time.h>
+
+1590748253 source:/workspace/dev/c/workspace/surwild_server/MutliServer.cpp
+	"MultiServer.h"
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<errno.h>
+	<unistd.h>
+	<arpa/inet.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/time.h>
+	"SocketHandler.h"
+
+1590769477 source:/workspace/dev/c/workspace/surwild_server/SocketHandler.cpp
+	"SocketHandler.h"
+	<string.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<unistd.h>
+	<arpa/inet.h>
+	<stdio.h>
+
+1590749272 /workspace/dev/c/workspace/surwild_server/SocketHandler.h
+
+1590748200 source:/workspace/dev/c/workspace/surwild_server/main.cpp
+	"MultiServer.h"
+
+1590750264 /workspace/dev/c/workspace/surwild_server/MultiServer.h
+	<netinet/in.h>
+
+1590769511 source:/workspace/dev/c/workspace/surwild_server/MultiServer.cpp
+	"MultiServer.h"
+	<cstring>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<errno.h>
+	<unistd.h>
+	<arpa/inet.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/time.h>
+	"SocketHandler.h"
+
