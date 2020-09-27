@@ -160,7 +160,7 @@ void MultiServer::start(const ushort port_, const ushort max_clients_)
             {
                 if (!user->receive())
                 {
-                    user->disconnect();
+                    disconnectClient(i);
                 }
             }
         }
