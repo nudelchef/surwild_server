@@ -14,21 +14,26 @@
 
 #include "SocketHandler.h"
 
-MultiServer::MultiServer(short port_, short max_clients_)
+MultiServer::MultiServer()
 {
-    port = port_;
-    max_clients = max_clients_;
-
-    client_socket = new int[max_clients_];
-    users = new SocketHandler[max_clients_];
 }
 
 MultiServer::~MultiServer()
 {
 }
 
-void MultiServer::start()
+void MultiServer::start(const ushort port_, const ushort max_clients_)
 {
+
+    port = port_;
+    max_clients = max_clients_;
+    bytesToRead = 0;
+
+    client_socket = new int[max_clients_];
+    users = new SocketHandler[max_clients_];
+
+
+
     //initialise all client_socket[] to 0 so not checked
     for (i = 0; i < max_clients; i++)
     {
@@ -136,14 +141,8 @@ void MultiServer::start()
                     printf("Adding to list of sockets as %d " , i);
                     printf("with socketfd %d\n" , new_socket);
 
-                    broadcast( "someone has joined.\n" ); // also calls handler.sendMessage
-
-                    //send new connection greeting message
-
-                    if(! sockhandl.sendMessage( "Welcome user xy\n" ) )
-                    {
-                        perror("send");
-                    }
+                    //send all required info to the player
+                    sockhandl.connect();
 
 
                     break;
@@ -159,37 +158,16 @@ void MultiServer::start()
 
             if (FD_ISSET( sockfd , &readfds))
             {
-                memset(&buffer[0], 0, sizeof(buffer));
-
-
-                printf("User (%d) has (%lu) bytes left.\n", i, users[i].bytesToRead == 0 ? 8 : users[i].bytesToRead);
-
-                short bytesToRead = user->bytesToRead > 0 ? std::min(sizeof(buffer), user->bytesToRead) : sizeof(uint64_t);
-                printf("Reading Bytes: %d\n", bytesToRead);
-
-                // Check if it was for closing , and also read the
-                // incoming message
-                if ((valread = read( sockfd , buffer, bytesToRead)) == 0)
+                if (!user->receive())
                 {
-                    disconnectClient(i);
-                }
-                else
-                {
-                    if (user->bytesToRead > 0)
-                    {
-                        user->receivedMessage(buffer);
-                    } else {
-                        memcpy(&user->bytesToRead, &buffer, sizeof(uint64_t));
-
-                        printf("Next incoming message has a size of: %lu\n", user->bytesToRead == 0 ? 8 : user->bytesToRead);
-                    }
+                    user->disconnect();
                 }
             }
         }
     }
 }
 
-void MultiServer::broadcast(char* message)
+void MultiServer::broadcast(const std::string& message)
 {
     for (i = 0; i < max_clients; i++)
     {
@@ -202,7 +180,7 @@ void MultiServer::broadcast(char* message)
     }
 }
 
-void MultiServer::disconnectClient(short id)
+void MultiServer::disconnectClient(const ushort id)
 {
     //Somebody disconnected , get his details and print
     getpeername(sockfd , (struct sockaddr*)&address , \
@@ -214,5 +192,5 @@ void MultiServer::disconnectClient(short id)
     users[i].disconnect();
     client_socket[i] = 0;
 
-    broadcast("someone has left.\n");
+    //broadcast("someone has left.\n");
 }

@@ -2,9 +2,7 @@
 
 int main(int argc , char *argv[])
 {
-    MultiServer* server = new MultiServer(8888, 30);
-
-    server->start();
+    MultiServer::instance().start(8888, 30);
 
     return 0;
 }

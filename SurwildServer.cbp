@@ -5,6 +5,7 @@
 		<Option title="SurwildServer" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="entity/;util/;net/" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/SurwildServer" prefix_auto="1" extension_auto="1" />
@@ -15,6 +16,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
+					<Add directory="./" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -25,6 +27,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
+					<Add directory="./" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,10 +38,28 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/MultiServer.h" />
-		<Unit filename="include/SocketHandler.h" />
+		<Unit filename="src/Direction.h">
+			<Option virtualFolder="util/" />
+		</Unit>
+		<Unit filename="src/Entity.cpp">
+			<Option virtualFolder="entity/" />
+		</Unit>
+		<Unit filename="src/Entity.h">
+			<Option virtualFolder="entity/" />
+		</Unit>
 		<Unit filename="src/MultiServer.cpp" />
+		<Unit filename="src/MultiServer.h" />
+		<Unit filename="src/PacketManager.h">
+			<Option virtualFolder="net/" />
+		</Unit>
+		<Unit filename="src/Player.cpp">
+			<Option virtualFolder="entity/" />
+		</Unit>
+		<Unit filename="src/Player.h">
+			<Option virtualFolder="entity/" />
+		</Unit>
 		<Unit filename="src/SocketHandler.cpp" />
+		<Unit filename="src/SocketHandler.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions />
 	</Project>

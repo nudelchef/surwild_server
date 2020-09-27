@@ -2,6 +2,9 @@
 #define MULTISERVER_H_INCLUDED
 
 #include <netinet/in.h>     // sockaddr_in
+#include <string>
+
+#include "PacketManager.h"
 
 class SocketHandler;
 
@@ -9,22 +12,25 @@ class MultiServer
 {
 public:
 
-    MultiServer(short port, short max_clients);
+    MultiServer();
     ~MultiServer();
 
-    void start();
+    void start(const ushort port, const ushort max_clients);
 
-    void broadcast(char* message);
+    void broadcast(const std::string& message);
 
-    void disconnectClient(short id);
+    void disconnectClient(const ushort id);
+
+    static MultiServer &instance() { static MultiServer server; return server; };
 
 protected:
 private:
 
     SocketHandler* users;
+    ushort bytesToRead;
 
-    short port;
-    short max_clients;
+    ushort port;
+    ushort max_clients;
 
     bool isServerRunning;
 
@@ -35,12 +41,13 @@ private:
     int new_socket;
     int* client_socket;
     int activity;
-    short i;
     int valread;
     int sockfd;
 
     int max_sd;
     struct sockaddr_in address;
+
+    ushort i;
 
     char buffer[1024]; //data buffer of 1K
 

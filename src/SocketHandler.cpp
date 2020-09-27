@@ -7,90 +7,119 @@
 #include <sys/socket.h>     // send
 #include <unistd.h>         // close
 #include <arpa/inet.h>      // close
+#include <string>
 
 #include <stdio.h>          // puts
+
+#include "Player.h"
+#include "MultiServer.h"
+#include "PacketManager.h"
+
 SocketHandler::SocketHandler()
 {
     sockfd = 0;
-    bytesToRead = 0ul;
+    player = nullptr;
 }
 
 SocketHandler::SocketHandler(int sockfd_)
 {
     sockfd = sockfd_;
-    std::cout << "[" << sockfd << "] received." << std::endl;
+    bytesTotal = 0ul;
     bytesToRead = 0ul;
+    bytesRead = 0ul;
+    bytesRemaining = 0ul;
+    full_message = "";
+
+    player = new Player(this);
 }
 
 SocketHandler::~SocketHandler()
 {
 }
 
-void SocketHandler::receivedMessage(char* message)
+bool SocketHandler::receive()
 {
-    std::cout << "[" << message << "] received. ";
-
-    /*
-    unsigned int lastMatch = 0;
-    for(unsigned int i = 0; i < 1024; i++) {
-
-        //std::cout << message[i];
-
-        if (message[i] == '\0')
+    if (bytesRemaining == 0)
+    {
+        if (recv(sockfd, buffer, sizeof(unsigned long), 0) != sizeof(unsigned long))
         {
-            while (!message_chunks.empty())
-            {
-                //std::cout << message_chunks.back();
-                message_chunks.pop_back();
-            }
-
-            for (unsigned int b = lastMatch; b <= i; b++)
-            {
-                std::cout << message[b];
-            }
-            std::cout << std::endl;
-
-            lastMatch = i;
+            return false;
         }
+        memcpy(&bytesTotal, &buffer[0], sizeof(unsigned long));
+
+        bytesTotal = ntohl((unsigned long) bytesTotal);
+        bytesRemaining = bytesTotal;
+        full_message = "";
+
+        return true;
+    } else {
+
+        bytesToRead = std::min(CHUNK_LENGTH, bytesRemaining);
+
+        bytesRead = recv(sockfd, &buffer, bytesToRead, 0);
+
+        if (bytesRead < 0) return false;
+        else bytesRemaining -= bytesRead;
+
+        full_message.append(&buffer[0], bytesRead);
+
+        if (bytesRemaining == 0)
+        {
+            std::cout << "received: [" << full_message << "] length: " << full_message.length() << std::endl;
+
+            receivedMessage(full_message);
+        }
+
+        return true;
     }
-    unsigned long additional_length = 1024 - lastMatch - 1;
-    std::cout << "additional_length:" << additional_length << std::endl;
-
-    if (additional_length != 0)
-    {
-        char buffer[additional_length];
-        memcpy(&buffer[0], &message[0] + lastMatch, additional_length);
-        std::cout << "add:" << buffer << std::endl;
-        message_chunks.push_back(buffer);
-    }
-
-    std::cout << "STILL IN BUFFER:" << std::endl;
-
-    while (!message_chunks.empty())
-    {
-        std::cout << message_chunks.back();
-        message_chunks.pop_back();
-    }
-    std::cout << std::endl;
-    */
-
-
-
-    //sendMessage(message);
-
-    //bytesToRead -= std::min(1024ul, bytesToRead);
-    bytesToRead -= strlen(message);
-    std::cout << "(" << strlen(message) << "bytes) - " << bytesToRead << " bytes left." << std::endl;
 }
 
-bool SocketHandler::sendMessage(char* message)
+void SocketHandler::receivedMessage(const std::string& message)
 {
-    puts(message);
-    std::cout << "sending on sockfd: " << sockfd << std::endl;
-    return send(sockfd, message, strlen(message), 0) == strlen(message);
+    sendMessage(message);
+}
+
+bool SocketHandler::sendMessage(const std::string& message)
+{
+    bytesTotal = message.length();
+    bytesRemaining = bytesTotal;
+    bytesSent = 0;
+    bytesToSend = 0;
+
+    std::cout << "sending on sockfd: (" << sockfd << ") [" << message << "] (" << bytesTotal << ") bytes." << std::endl;
+
+
+    lengthValue = htonl((unsigned long) bytesTotal);
+    if (send(sockfd, (const char*)&lengthValue, sizeof(lengthValue), 0) < 0) {
+        return false;
+    }
+
+    do
+    {
+        bytesToSend = std::min(CHUNK_LENGTH, bytesRemaining);
+
+        bytesSent = send(sockfd, message.c_str() + (bytesTotal - bytesRemaining), bytesToSend, 0);
+
+        if (bytesSent < 0) return false;
+        else bytesRemaining -= bytesSent;
+
+    } while (bytesRemaining > 0);
+
+    return true;
+}
+
+void SocketHandler::connect()
+{
+    std::string playerData = PacketManager::PLAYER_DATA(player).pack();
+
+    PacketManager::PLAYER_DATA data = PacketManager::PLAYER_DATA(playerData);
+
+    MultiServer::instance().broadcast(playerData);
 }
 
 int SocketHandler::disconnect()
 {
+    if (player)
+        free(player);
     return close( sockfd );
 }
