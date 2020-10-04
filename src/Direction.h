@@ -3,7 +3,7 @@
 
 enum Direction
 {
-    UP, DOWN, LEFT, RIGHT
+    DOWN, LEFT, UP, RIGHT
 };
 
 #endif // DIRECTION_H_INCLUDED

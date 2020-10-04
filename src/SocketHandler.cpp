@@ -110,9 +110,7 @@ bool SocketHandler::sendMessage(const std::string& message)
 
 void SocketHandler::connect()
 {
-    std::string playerData = PacketManager::PLAYER_DATA(player).pack();
-
-    PacketManager::PLAYER_DATA data = PacketManager::PLAYER_DATA(playerData);
+    std::string playerData = PACKET::REGISTER_PLAYER(player).pack();
 
     MultiServer::instance().broadcast(playerData);
 }

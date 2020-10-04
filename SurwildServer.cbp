@@ -47,8 +47,15 @@
 		<Unit filename="src/Entity.h">
 			<Option virtualFolder="entity/" />
 		</Unit>
-		<Unit filename="src/MultiServer.cpp" />
-		<Unit filename="src/MultiServer.h" />
+		<Unit filename="src/MultiServer.cpp">
+			<Option virtualFolder="net/" />
+		</Unit>
+		<Unit filename="src/MultiServer.h">
+			<Option virtualFolder="net/" />
+		</Unit>
+		<Unit filename="src/PacketManager.cpp">
+			<Option virtualFolder="net/" />
+		</Unit>
 		<Unit filename="src/PacketManager.h">
 			<Option virtualFolder="net/" />
 		</Unit>
@@ -58,8 +65,12 @@
 		<Unit filename="src/Player.h">
 			<Option virtualFolder="entity/" />
 		</Unit>
-		<Unit filename="src/SocketHandler.cpp" />
-		<Unit filename="src/SocketHandler.h" />
+		<Unit filename="src/SocketHandler.cpp">
+			<Option virtualFolder="net/" />
+		</Unit>
+		<Unit filename="src/SocketHandler.h">
+			<Option virtualFolder="net/" />
+		</Unit>
 		<Unit filename="src/main.cpp" />
 		<Extensions />
 	</Project>

@@ -12,7 +12,7 @@ class Player: public Entity
         Player(SocketHandler* handler_);
         virtual ~Player();
 
-        unsigned int playerId;
+        uint32_t playerId;
 
     protected:
 

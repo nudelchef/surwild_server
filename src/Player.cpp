@@ -3,7 +3,7 @@
 Player::Player()
 {
     handler = nullptr;
-    texture = "";
+    textureString = "";
 
     tilePositionX = 0;
     tilePositionY = 0;
@@ -14,7 +14,7 @@ Player::Player()
 Player::Player(SocketHandler* handler_)
 {
     handler = handler_;
-    texture = "assets/naey_spritesheet.png";
+    textureString = "assets/naey_spritesheet.png";
 
     movementDirection = Direction::RIGHT;
     tilePositionX = 5;

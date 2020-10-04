@@ -11,17 +11,17 @@ public:
     Entity();
     virtual ~Entity();
 
-    std::string texture;
+    std::string textureString;
 
     Direction movementDirection;
 
-    unsigned int entityId;
+    uint32_t entityId;
 
-    unsigned short tilePositionX;
-    unsigned short tilePositionY;
+    uint32_t tilePositionX;
+    uint32_t tilePositionY;
 
-    unsigned short x;
-    unsigned short y;
+    uint32_t x;
+    uint32_t y;
 
 protected:
 
