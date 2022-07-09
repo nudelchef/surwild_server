@@ -1,7 +1,6 @@
 #include "Player.h"
 
-Player::Player()
-{
+Player::Player() {
     handler = nullptr;
     textureString = "";
 
@@ -11,8 +10,7 @@ Player::Player()
     y = 0;
 }
 
-Player::Player(SocketHandler* handler_)
-{
+Player::Player(SocketHandler *handler_) {
     handler = handler_;
     textureString = "assets/naey_spritesheet.png";
 
@@ -23,8 +21,5 @@ Player::Player(SocketHandler* handler_)
     y = 8;
 }
 
-Player::~Player()
-{
-    //dtor
-}
+Player::~Player() = default;
 

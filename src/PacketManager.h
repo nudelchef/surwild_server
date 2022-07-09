@@ -16,7 +16,8 @@ namespace PACKET {
         uint16_t packetId;
 
         PACKET();
-        PACKET(int id);
+
+        explicit PACKET(int id);
 
         virtual std::string pack();
     };
@@ -31,20 +32,22 @@ namespace PACKET {
         std::string username;
         std::string password;
 
-        LOGIN(std::string packet);
-        LOGIN(std::string username_, std::string password_);
+        explicit LOGIN(const std::string &packet);
 
-        std::string pack();
+        explicit LOGIN(std::string username_, std::string password_);
+
+        std::string pack() override;
     };
 
     struct UNREGISTER_PLAYER : PACKET {
     public:
         uint32_t playerId;
 
-        UNREGISTER_PLAYER(std::string packet);
-        UNREGISTER_PLAYER(Player* player);
+        explicit UNREGISTER_PLAYER(const std::string &packet);
 
-        std::string pack();
+        explicit UNREGISTER_PLAYER(Player *player);
+
+        std::string pack() override;
     };
 
     struct REGISTER_PLAYER : PACKET {
@@ -63,10 +66,11 @@ namespace PACKET {
         uint32_t y;
 
 
-        REGISTER_PLAYER(std::string packet);
-        REGISTER_PLAYER(Player* player);
+        explicit REGISTER_PLAYER(const std::string &packet);
 
-        std::string pack();
+        explicit REGISTER_PLAYER(Player *player);
+
+        std::string pack() override;
     };
 }
 
