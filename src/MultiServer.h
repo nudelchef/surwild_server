@@ -8,25 +8,28 @@
 
 class SocketHandler;
 
-class MultiServer
-{
+class MultiServer {
 public:
 
     MultiServer();
+
     ~MultiServer();
 
     void start(const ushort port, const ushort max_clients);
 
-    void broadcast(const std::string& message);
+    void broadcast(const std::string &message);
 
     void disconnectClient(const ushort id);
 
-    static MultiServer &instance() { static MultiServer server; return server; };
+    static MultiServer &instance() {
+        static MultiServer server;
+        return server;
+    };
 
 protected:
 private:
 
-    SocketHandler* users;
+    SocketHandler *users;
     ushort bytesToRead;
 
     ushort port;
@@ -39,7 +42,7 @@ private:
     int master_socket;
     int addrlen;
     int new_socket;
-    int* client_socket;
+    int *client_socket;
     int activity;
     int valread;
     int sockfd;

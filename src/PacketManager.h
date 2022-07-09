@@ -16,6 +16,7 @@ namespace PACKET {
         uint16_t packetId;
 
         PACKET();
+
         PACKET(int id);
 
         virtual std::string pack();
@@ -32,6 +33,7 @@ namespace PACKET {
         std::string password;
 
         LOGIN(std::string packet);
+
         LOGIN(std::string username_, std::string password_);
 
         std::string pack();
@@ -42,7 +44,8 @@ namespace PACKET {
         uint32_t playerId;
 
         UNREGISTER_PLAYER(std::string packet);
-        UNREGISTER_PLAYER(Player* player);
+
+        UNREGISTER_PLAYER(Player *player);
 
         std::string pack();
     };
@@ -64,7 +67,8 @@ namespace PACKET {
 
 
         REGISTER_PLAYER(std::string packet);
-        REGISTER_PLAYER(Player* player);
+
+        REGISTER_PLAYER(Player *player);
 
         std::string pack();
     };

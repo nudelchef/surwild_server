@@ -1,8 +1,7 @@
 #ifndef DIRECTION_H_INCLUDED
 #define DIRECTION_H_INCLUDED
 
-enum Direction
-{
+enum Direction {
     DOWN, LEFT, UP, RIGHT
 };
 

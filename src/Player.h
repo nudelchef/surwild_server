@@ -5,19 +5,20 @@
 
 class SocketHandler;
 
-class Player: public Entity
-{
-    public:
-        Player();
-        Player(SocketHandler* handler_);
-        virtual ~Player();
+class Player : public Entity {
+public:
+    Player();
 
-        uint32_t playerId;
+    Player(SocketHandler *handler_);
 
-    protected:
+    virtual ~Player();
 
-    private:
-        SocketHandler* handler;
+    uint32_t playerId;
+
+protected:
+
+private:
+    SocketHandler *handler;
 };
 
 #endif // PLAYER_H

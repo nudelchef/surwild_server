@@ -15,14 +15,12 @@
 #include "MultiServer.h"
 #include "PacketManager.h"
 
-SocketHandler::SocketHandler()
-{
+SocketHandler::SocketHandler() {
     sockfd = 0;
     player = nullptr;
 }
 
-SocketHandler::SocketHandler(int sockfd_)
-{
+SocketHandler::SocketHandler(int sockfd_) {
     sockfd = sockfd_;
     bytesTotal = 0ul;
     bytesToRead = 0ul;
@@ -33,16 +31,12 @@ SocketHandler::SocketHandler(int sockfd_)
     player = new Player(this);
 }
 
-SocketHandler::~SocketHandler()
-{
+SocketHandler::~SocketHandler() {
 }
 
-bool SocketHandler::receive()
-{
-    if (bytesRemaining == 0)
-    {
-        if (recv(sockfd, buffer, sizeof(unsigned long), 0) != sizeof(unsigned long))
-        {
+bool SocketHandler::receive() {
+    if (bytesRemaining == 0) {
+        if (recv(sockfd, buffer, sizeof(unsigned long), 0) != sizeof(unsigned long)) {
             return false;
         }
         memcpy(&bytesTotal, &buffer[0], sizeof(unsigned long));
@@ -63,8 +57,7 @@ bool SocketHandler::receive()
 
         full_message.append(&buffer[0], bytesRead);
 
-        if (bytesRemaining == 0)
-        {
+        if (bytesRemaining == 0) {
             std::cout << "received: [" << full_message << "] length: " << full_message.length() << std::endl;
 
             receivedMessage(full_message);
@@ -74,13 +67,11 @@ bool SocketHandler::receive()
     }
 }
 
-void SocketHandler::receivedMessage(const std::string& message)
-{
+void SocketHandler::receivedMessage(const std::string &message) {
     sendMessage(message);
 }
 
-bool SocketHandler::sendMessage(const std::string& message)
-{
+bool SocketHandler::sendMessage(const std::string &message) {
     bytesTotal = message.length();
     bytesRemaining = bytesTotal;
     bytesSent = 0;
@@ -90,12 +81,11 @@ bool SocketHandler::sendMessage(const std::string& message)
 
 
     lengthValue = htonl((unsigned long) bytesTotal);
-    if (send(sockfd, (const char*)&lengthValue, sizeof(lengthValue), 0) < 0) {
+    if (send(sockfd, (const char *) &lengthValue, sizeof(lengthValue), 0) < 0) {
         return false;
     }
 
-    do
-    {
+    do {
         bytesToSend = std::min(CHUNK_LENGTH, bytesRemaining);
 
         bytesSent = send(sockfd, message.c_str() + (bytesTotal - bytesRemaining), bytesToSend, 0);
@@ -108,16 +98,14 @@ bool SocketHandler::sendMessage(const std::string& message)
     return true;
 }
 
-void SocketHandler::connect()
-{
+void SocketHandler::connect() {
     std::string playerData = PACKET::REGISTER_PLAYER(player).pack();
 
     MultiServer::instance().broadcast(playerData);
 }
 
-int SocketHandler::disconnect()
-{
+int SocketHandler::disconnect() {
     if (player)
         free(player);
-    return close( sockfd );
+    return close(sockfd);
 }

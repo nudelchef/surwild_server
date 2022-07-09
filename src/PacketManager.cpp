@@ -2,11 +2,11 @@
 
 #include "Player.h"
 
-namespace PACKET
-{
+namespace PACKET {
 
     //// packet
     PACKET::PACKET() : packetId(0) {};
+
     PACKET::PACKET(int id) : packetId(id) {};
 
     std::string PACKET::PACKET::pack() {
@@ -30,6 +30,7 @@ namespace PACKET
         std::getline(p_stream, username, '\037');
         std::getline(p_stream, password, '\037');
     }
+
     LOGIN::LOGIN(std::string username_, std::string password_) : PACKET(2) {
         username = username_;
         password = password_;
@@ -37,10 +38,9 @@ namespace PACKET
 
     std::string LOGIN::LOGIN::pack() {
         std::stringstream packet("");
-        packet    << htons(packetId)
-        << '\037' << username
-        << '\037' << password
-        ;
+        packet << htons(packetId)
+               << '\037' << username
+               << '\037' << password;
         return packet.str();
     }
 
@@ -57,15 +57,15 @@ namespace PACKET
         std::getline(p_stream, line, '\037');
         playerId = ntohs(static_cast<uint32_t>(std::stoul(line)));
     }
-    UNREGISTER_PLAYER::UNREGISTER_PLAYER(Player* player) : PACKET(3) {
+
+    UNREGISTER_PLAYER::UNREGISTER_PLAYER(Player *player) : PACKET(3) {
         playerId = player->playerId;
     }
 
     std::string UNREGISTER_PLAYER::UNREGISTER_PLAYER::pack() {
         std::stringstream packet("");
-        packet    << htons(packetId)
-        << '\037' << htons(playerId);
-        ;
+        packet << htons(packetId)
+               << '\037' << htons(playerId);;
         return packet.str();
     }
 
@@ -103,7 +103,7 @@ namespace PACKET
         y = ntohs(static_cast<uint32_t>(std::stoul(line)));
     }
 
-    REGISTER_PLAYER::REGISTER_PLAYER(Player* player) : PACKET(4) {
+    REGISTER_PLAYER::REGISTER_PLAYER(Player *player) : PACKET(4) {
         playerId = player->playerId;
         entityId = player->entityId;
         textureString = player->textureString;
@@ -116,16 +116,15 @@ namespace PACKET
 
     std::string REGISTER_PLAYER::REGISTER_PLAYER::pack() {
         std::stringstream packet("");
-        packet    << htons(packetId)
-        << '\037' << htons(playerId)
-        << '\037' << htons(entityId)
-        << '\037' << textureString
-        << '\037' << htons(movementDirection)
-        << '\037' << htons(tilePositionX)
-        << '\037' << htons(tilePositionY)
-        << '\037' << htons(x)
-        << '\037' << htons(y)
-        ;
+        packet << htons(packetId)
+               << '\037' << htons(playerId)
+               << '\037' << htons(entityId)
+               << '\037' << textureString
+               << '\037' << htons(movementDirection)
+               << '\037' << htons(tilePositionX)
+               << '\037' << htons(tilePositionY)
+               << '\037' << htons(x)
+               << '\037' << htons(y);
         return packet.str();
     }
 

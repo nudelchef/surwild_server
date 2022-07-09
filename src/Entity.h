@@ -5,10 +5,10 @@
 
 #include "Direction.h"
 
-class Entity
-{
+class Entity {
 public:
     Entity();
+
     virtual ~Entity();
 
     std::string textureString;

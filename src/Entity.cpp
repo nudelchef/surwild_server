@@ -1,11 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity()
-{
+Entity::Entity() {
     //ctor
 }
 
-Entity::~Entity()
-{
+Entity::~Entity() {
     //dtor
 }
